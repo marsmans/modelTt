@@ -7,7 +7,10 @@
 # Punten zijn ingelezen met http://arohatgi.info/WebPlotDigitizer/app/
 # 
 
+# Den Haag
 setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+# Thuis
+setwd("~/Documenten/Stage PBL/modelTt")
 
 source("TCRE.R")
 source("costs.R")

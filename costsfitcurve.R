@@ -1,6 +1,8 @@
 
+# Den Haag
 setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
-
+# Thuis
+setwd("~/Documenten/Stage PBL/modelTt")
 
 
 #----------- Relatie cumulatieve CO2 <-> kosten -------------------
@@ -42,8 +44,10 @@ plot(cumuvscostsPE,xlim=c(0,7),ylim=c(0,8))
 
 # curve y = 1/(ax-b) erbij
 #bovenkant redelijke fit
-curve(3/(x-1), add = TRUE)
+curve(3/(x-1), add = F,xlim=c(0,7),ylim=c(0,8))
 
 #onderkant redelijke fit
 curve(1/(x-0.5), add = TRUE)
 
+# gemiddelde
+curve(2/(x-0.75), add = TRUE)

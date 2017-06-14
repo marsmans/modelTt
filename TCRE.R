@@ -7,15 +7,24 @@
 # Punten zijn ingelezen met http://arohatgi.info/WebPlotDigitizer/app/
 # 
 
-setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+# Den Haag
+#setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+# Thuis
+setwd("~/Documenten/Stage PBL/modelTt")
 
 source("packages.R")
 
 #----------- Relatie cumulatieve CO2 <-> temperatuur -----------------
 
 # data inlezen
-cumuvstempLL <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuvstemp_lowerlimit.txt", header = TRUE)
-cumuvstempUL <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuvstemp_upperlimit.txt", header = TRUE)
+# Den Haag
+#cumuvstempLL <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuvstemp_lowerlimit.txt", header = TRUE)
+#cumuvstempUL <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuvstemp_upperlimit.txt", header = TRUE)
+
+# Thuis
+cumuvstempLL <- read.csv(file = "./../Databases/cumuvstemp_lowerlimit.txt", header = TRUE)
+cumuvstempUL <- read.csv(file = "./../Databases/cumuvstemp_upperlimit.txt", header = TRUE)
+
 
 # schalen naar Tt
 cumuvstempLL[1] <- cumuvstempLL[1]/1000
@@ -42,7 +51,7 @@ TCREstd05 <- (slope - coef(fLL)[2])/abs(qnorm(0.05))
 TCREstd2 = (TCREstd05 + TCREstd95)/2
 
 #------------- Temp 2010 --------------------------
-temp2010 <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/temp2010.txt", header = TRUE)
+temp2010 <- read.csv(file = "./../Databases/temp2010.txt", header = TRUE)
 
 
 T2010mean <- with(temp2010,temp)[1]
@@ -59,7 +68,7 @@ T2010std2 = (T2010std05 + T2010std95)/2
 
 
 #------------ CumuCO2 2010 ------------------------
-cumuCO22010 <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuCO22010.txt", header = TRUE)
+cumuCO22010 <- read.csv(file = "./../Databases/cumuCO22010.txt", header = TRUE)
 
 # schalen naar Tt
 cumuCO22010[1] <- cumuCO22010[1]/1000
@@ -114,6 +123,7 @@ oneRun <- function(Ttarget,T2010,TCRE,CO22010) {
 
 # functie om cumuCO2 uit te rekenen aan de hand van een gegeven Ttarget 
 # en gegeven sample voor T2010, TCRE en CO22010 
+
 f.cumuCO2result <- function(N, Ttarget, sample) {
   f.Ttarget <- rep(Ttarget, N)
   # run model

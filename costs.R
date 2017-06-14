@@ -5,7 +5,10 @@
 #
 #------------------------------------------------
 
+# Den Haag
 setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+# Thuis
+setwd("~/Documenten/Stage PBL/modelTt")
 
 source("TCRE.R")
 
@@ -82,6 +85,7 @@ costs.oneRun <- function(cumuCO2,costs.slope,baselineCO2) {
 
 # functie om costs uit te rekenen aan de hand van een gegeven Ttarget
 # voorwaarden: gemiddelde en std van costs.slope, en model zijn gegeven
+
 f.costsresult <- function(N,cumuCO2result, sample) {
   
   # run model
