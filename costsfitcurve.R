@@ -8,9 +8,9 @@ setwd("~/Documenten/Stage PBL/modelTt")
 #----------- Relatie cumulatieve CO2 <-> kosten -------------------
 
 # data inlezen
-cumuvscostsGE <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuCO2vscostsGEmodels.txt", header = TRUE)
-cumuvscostsPE <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuCO2vscostsPEmodels.txt", header = TRUE)
-cumuvscostsAllE <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuCO2vscostsAllEmodels.txt", header = TRUE)
+cumuvscostsGE <- read.csv(file = "./../Databases/cumuCO2vscostsGEmodels.txt", header = TRUE)
+cumuvscostsPE <- read.csv(file = "./../Databases/cumuCO2vscostsPEmodels.txt", header = TRUE)
+cumuvscostsAllE <- read.csv(file = "./../Databases/cumuCO2vscostsAllEmodels.txt", header = TRUE)
 
 # schalen naar Tt
 cumuvscostsGE$cumuCO2 <- cumuvscostsGE$cumuCO2*10
@@ -44,7 +44,7 @@ plot(cumuvscostsPE,xlim=c(0,7),ylim=c(0,8))
 
 # curve y = 1/(ax-b) erbij
 #bovenkant redelijke fit
-curve(3/(x-1), add = F,xlim=c(0,7),ylim=c(0,8))
+curve(3/(x-1), add = T,xlim=c(0,7),ylim=c(0,8))
 
 #onderkant redelijke fit
 curve(1/(x-0.5), add = TRUE)

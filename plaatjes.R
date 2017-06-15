@@ -41,7 +41,7 @@ f.seed <- 21
 
 # maak samples
 cumuvstemp.sample <- f.cumuvstemp.sample(N,f.seed)
-costs.sample <- f.costs.sample(N, f.seed)
+p.sample <- f.p.sample(N, f.seed)
 
 
 # histogram van input
@@ -57,27 +57,66 @@ hist(costs.sample$costs.slope, breaks = "Scott", main = "Histogram of costs.slop
 hist(costs.sample$baselineCO2, breaks = "Scott", main = "Histogram of baseline CO2", xlab = "Baseline CO2")
 par(mfrow=c(1,1))
 
+# costs nonlineair
+hist(p.sample, breaks = "Scott", main = "Histogram of p", xlab = "response parameter")
+
+
+
 #maak resultaten
-sample_en_result <- f.cumuCO2result(N,1.5,cumuvstemp.sample)
-costs.sample_en_result <- data.frame(sample_en_result,f.costsresult(N,sample_en_result[,5],costs.sample))
+#sample_en_result <- f.cumuCO2result(N,1.5,cumuvstemp.sample)
+#costs.sample_en_result <- data.frame(sample_en_result,f.costsresult(N,sample_en_result[,5],costs.sample))
 
 
-hist.cumuCO2result <- function(sample_en_result) {
+hist.cumuCO2result <- function(N,Ttarget,f.seed) {
+  # maak samples
+  cumuvstemp.sample <- f.cumuvstemp.sample(N,f.seed)
+  # maak resultaten
+  sample_en_result <- f.cumuCO2result(N,Ttarget,cumuvstemp.sample)
+  # maak histogram
   hist(sample_en_result$cumuCO2result, breaks = "Scott", main = paste("CO2result, Ttarget = ", sample_en_result$f.Ttarget[1]) , xlab = "cumuCO2 (Tt)")
 }
 
 
-hist.costs.result <- function(costs.sample_en_result) {
-  hist(costs.sample_en_result$costs, breaks = "Scott", main = paste("Costs, Ttarget = ", costs.sample_en_result$f.Ttarget[1]) , xlab = "Costs (aba + cons)")
+hist.costs.result <- function(N,Ttarget,f.seed) {
+  # maak samples
+  cumuvstemp.sample <- f.cumuvstemp.sample(N,f.seed)
+  costs.sample <- f.costs.sample(N, f.seed)
+  
+  # maak resultaten
+  sample_en_result <- f.cumuCO2result(N,Ttarget,cumuvstemp.sample)
+  costs.sample_en_result <- data.frame(sample_en_result,f.costsresult(N,sample_en_result[,5],costs.sample))
+  
+  # maak histo
+  hist(costs.sample_en_result$costs, breaks = "Scott", main = paste("Costs, Ttarget = ", Ttarget) , xlab = "Costs")
 }
 
-# histogrammen van costs.result
-par(mfrow=c(2,2))
-hist(costs.result.14, breaks = "Scott", main = "costs.result, Ttarget = 1-4", xlab = "Costs")
-hist(costs.result.1.5, breaks = "Scott", main = "costs.result, Ttarget = 1.5", xlab = "Costs")
-hist(costs.result.2, breaks = "Scott", main = "costs.result, Ttarget = 2", xlab = "Costs")
-hist(costs.result.3, breaks = "Scott", main = "costs.result, Ttarget = 3", xlab = "Costs")
+# non lineair
+hist.costs.result.nonlin <- function(N,Ttarget,f.seed) {
+  # maak samples
+  cumuvstemp.sample <- f.cumuvstemp.sample(N,f.seed)
+  p.sample <- f.p.sample(N, f.seed)
+  
+  # maak resultaten
+  sample_en_result <- f.cumuCO2result(N,Ttarget,cumuvstemp.sample)
+  costs.result <- f.costsresult(N,sample_en_result[,5],p.sample)
+  #costs.sample_en_result <- data.frame(sample_en_result,f.costsresult(N,sample_en_result[,5], p.sample))
+  
+  # maak histo
+  hist(costs.result, breaks = "Scott", main = paste("Costs, Ttarget = ", Ttarget) , xlab = "Costs")
+}
 
+
+scatter.TCRE <- function(f.data) {
+  plot(f.data$costs~f.data$TCRE, sub = "TCRE", xlab = "TCRE", ylab = "costs")
+}
+
+scatter.p <- function(f.data) {
+  plot(f.data$costs~f.data$p.sample, sub = "p", xlab = "p", ylab = "costs", xlim=c(0.5,1),ylim=c(0,2))
+}
+
+scatter.cumuCO2result <- function(f.data) {
+  plot(f.data$costs~f.data$cumuCO2result, sub = "cumuCO2result", xlab = "cumuCO2result", ylab = "costs", xlim=c(-7,7),ylim=c(-8,8))
+}
 
 
 
@@ -181,4 +220,24 @@ d.14 <- density(cumuCO2result.14)
 d.1.5 <- density(cumuCO2result.1.5)
 d.2 <- density(cumuCO2result.2)
 d.3 <- density(cumuCO2result.3)
+
+
+
+# plot van CC waarden
+# krijgt een CC matrix
+
+# maak er een werkbaarder format van
+CC <-gather(CC,variable,value,c('T2010','TCRE','CO22010','cumuCO2result','p.sample'))
+CC=data.table(CC)
+
+# plotting
+p = ggplot(data=CC[variable %in% c()])
+p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="dodge")
+p = p + theme_bw() + theme(axis.text.x=element_text(size=12))
+p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","p.sample"="dark red","T2010"="black","TCRE"="green"))
+ggsave(paste("Fig1.png"),p,width=12,height=12,dpi=300)
+
+
+
+
 
