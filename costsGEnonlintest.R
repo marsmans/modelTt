@@ -77,7 +77,7 @@ f.p.sample <- function(N, f.seed) {
 # intercept = -baselineCO2 * slope
 
 costs.oneRun <- function(cumuCO2,curve.parameter) {
-  return((4 * curve.parameter - 1)/(cumuCO2 - curve.parameter))
+  return((25 * curve.parameter - 18)/(cumuCO2 - curve.parameter))
 }
 
 
@@ -116,6 +116,8 @@ f.dataframe <- function(N,Ttarget,f.seed) {
 
 N <- 10000
 s.seed <- 21
+data1.5 <- f.dataframe(N,1.5,s.seed)
+
 
 #-------- correlation coefficient matrix -----------
 
