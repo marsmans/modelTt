@@ -19,7 +19,7 @@ cumuvscostsPE$cumuCO2 <- cumuvscostsPE$cumuCO2*10
 
 # plaatje van GE models
 par(mfrow=c(1,1))
-plot(cumuvscostsGE,xlim=c(0,7),ylim=c(-1,8))
+plot(cumuvscostsGE,xlim=c(0,7),ylim=c(-1,8),xlab = "cumu CO2 (Tt)",ylab = "Abatement costs (% GDP)")
 
 # curve y = 1/(ax-b) erbij
 #bovenkant redelijke fit

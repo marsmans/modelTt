@@ -103,8 +103,13 @@ f.dataframe <- function(N,Ttarget,f.seed) {
   cumuvstemp.sample <- f.cumuvstemp.sample(N,f.seed)
   p.sample <- f.p.sample(N, f.seed)
   # reken resultaten uit
+  
   sample_en_result <- f.cumuCO2result(N,Ttarget,cumuvstemp.sample)
-  costs.sample_en_result <- data.frame(sample_en_result,f.costsresult(N,sample_en_result[,5], p.sample))
+  cumuCO2result <- mapply(oneRun, Ttarget, T2010mean,TCREmean,CO22010mean)
+  sample_en_result$cumuCO2result <- cumuCO2result
+  costs.result <- f.costsresult(N,cumuCO2result,p.sample)
+  costs.sample_en_result <- data.frame(sample_en_result,costs.result)
+  
   return(costs.sample_en_result)
 }
 
@@ -126,9 +131,10 @@ f.costs.CCmatrix <- function(N,f.seed) {
   for (i in seq(1, 4, by = 0.1)) {
     # print(i)
     sample_en_result <- f.cumuCO2result(N,i,cumuvstemp.sample)
-    cumuCO2result <- sample_en_result[,5]
-    costs.result <- f.costsresult(N,sample_en_result[,5],p.sample)
-    costs.sample_en_result <- data.frame(sample_en_result,f.costsresult(N,sample_en_result[,5], p.sample))
+    cumuCO2result <- mapply(oneRun, i, T2010mean,TCREmean,CO22010mean)
+    sample_en_result$cumuCO2result <- cumuCO2result
+    costs.result <- f.costsresult(N,cumuCO2result,p.sample)
+    costs.sample_en_result <- data.frame(sample_en_result,costs.result)
     
     # laat CC van costs met tTarget en costs met zichzelf eruit
     costs.CCmatrix.hulp <- cor(costs.sample_en_result)[c(-1,-7),]
