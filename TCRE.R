@@ -8,20 +8,15 @@
 # 
 
 # Den Haag
-#setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
 # Thuis
-setwd("~/Documenten/Stage PBL/modelTt")
+#setwd("~/Documenten/Stage PBL/modelTt")
 
 source("packages.R")
 
 #----------- Relatie cumulatieve CO2 <-> temperatuur -----------------
 
 # data inlezen
-# Den Haag
-#cumuvstempLL <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuvstemp_lowerlimit.txt", header = TRUE)
-#cumuvstempUL <- read.csv(file = "~/disks/y/ontwapps/Timer/Users/Stijn/Model/Databases/cumuvstemp_upperlimit.txt", header = TRUE)
-
-# Thuis
 cumuvstempLL <- read.csv(file = "./../Databases/cumuvstemp_lowerlimit.txt", header = TRUE)
 cumuvstempUL <- read.csv(file = "./../Databases/cumuvstemp_upperlimit.txt", header = TRUE)
 
@@ -51,8 +46,8 @@ TCREstd05 <- (slope - coef(fLL)[2])/abs(qnorm(0.05))
 TCREstd2 = (TCREstd05 + TCREstd95)/2
 
 #------------- Temp 2010 --------------------------
+# data inlezen
 temp2010 <- read.csv(file = "./../Databases/temp2010.txt", header = TRUE)
-
 
 T2010mean <- with(temp2010,temp)[1]
 
@@ -68,6 +63,7 @@ T2010std2 = (T2010std05 + T2010std95)/2
 
 
 #------------ CumuCO2 2010 ------------------------
+# data inlezen
 cumuCO22010 <- read.csv(file = "./../Databases/cumuCO22010.txt", header = TRUE)
 
 # schalen naar Tt
@@ -90,7 +86,7 @@ CO22010std2 = 3.67 * (CO22010std05 + CO22010std95)/2
 # Zie ook http://r.789695.n4.nabble.com/Latin-Hypercube-Sampling-with-a-condition-td3563765.html
 # en https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2570191/
 
-
+# maakt een sample van T2010, TCRE en CO22010
 f.cumuvstemp.sample <- function(N, f.seed) {
   require(lhs)
   
@@ -101,7 +97,6 @@ f.cumuvstemp.sample <- function(N, f.seed) {
   colnames(x) <- c("Ttarget", "T2010", "TCRE", "CO22010")
   
   # transformeer random LHS naar LHS met goede parameters
-  #f.Ttarget <- rep(Ttarget, N)
   T2010 <- qnorm(x[,2], mean=T2010mean, sd=T2010std)
   TCRE <- qnorm(x[,3], mean=TCREmean,sd=TCREstd)
   CO22010 <- qnorm(x[,4], mean=CO22010mean, sd=CO22010std)
@@ -137,6 +132,7 @@ f.cumuCO2result <- function(N, Ttarget, sample) {
 N <- 10000
 s.seed <- 21
 
+# functie die voor waarden van Ttarget tussen 1 en 4 de Correlation Coefficent uitrekent tussen de inputparameters en cumuCO2, de model uitkomst
 f.CCmatrix <- function(N,f.seed) {
   # initialisatie
   CCmatrix <- NULL

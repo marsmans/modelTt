@@ -2,9 +2,16 @@
 # 
 # Dummymodel met vrij onzekere waarden
 # Sensitivity in costs
-# PE models, linear fit
+# GE models, linear fit
 #
 #------------------------------------------------
+
+if (dir.exists("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")) {     #Den Haag
+  setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+} else if (dir.exists("~/Documenten/Stage PBL/modelTt")) {    #thuis
+  setwd("~/Documenten/Stage PBL/modelTt")
+}
+
 
 # Den Haag
 setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
@@ -109,25 +116,28 @@ f.dataframe <- function(N,Ttarget,f.seed) {
   return(costs.sample_en_result)
 }
 
-
-#-------- correlation coefficient matrix -----------
-
 N <- 10000
 s.seed <- 21
+data1.5 <- f.dataframe(N,1.5,s.seed)
+
+#-------- correlation coefficient matrix -----------
 
 f.costs.CCmatrix <- function(N,f.seed) {
   # initialisatie
   costs.CCmatrix <- NULL
   teller <- 0
   
+  # maak sample
   cumuvstemp.sample <- f.cumuvstemp.sample(N,f.seed)
   costs.sample <- f.costs.sample(N, f.seed)
   
   for (i in seq(1, 4, by = 0.1)) {
     # print(i)
+    # bereken resultaten
     sample_en_result <- f.cumuCO2result(N,i,cumuvstemp.sample)
     costs.sample_en_result <- data.frame(sample_en_result,f.costsresult(N,sample_en_result[,5],costs.sample))
     
+    # bereken CC waarden
     costs.CCmatrix.hulp <- cor(costs.sample_en_result)[c(-1,-7,-8),]
     costs.CCmatrix <- rbind(costs.CCmatrix, costs.CCmatrix.hulp[,8])
     
@@ -138,6 +148,7 @@ f.costs.CCmatrix <- function(N,f.seed) {
   return(costs.CCmatrix)
 }
 
+# maak een matrix van CCwaarden
 CCmat <- f.costs.CCmatrix(N,s.seed)
 # schrijf naar file
 write.table(CCmat, file="CCmatGElin.txt", row.names=TRUE, col.names=TRUE, sep = ",")

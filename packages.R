@@ -7,7 +7,7 @@
 # 
 
 
-#library(ggplot2)
+library(ggplot2)
 library(mc2d)
 library(sensitivity)
 library(lhs)
@@ -16,4 +16,4 @@ library(lhs)
 #library(pse)
 library(xtable)
 library(data.table)
-#library(tidyr)
+library(tidyr)
