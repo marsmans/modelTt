@@ -119,8 +119,86 @@ scatter.cumuCO2result <- function(f.data) {
 
 
 
-#----------- plot van CC waarden--------------
+#----------- plot van CC waarden (lin) --------------
 # krijgt een CC matrix
+CCmat <- f.costs.CCmatrix(N,s.seed)
+CCdata = data.table(CCmat)
+# maak er een 'werkbaarder' format van
+CC <-gather(CCdata,variable,value,c('T2010','TCRE','CO22010','cumuCO2result','costs.slope'))
+CC=data.table(CC)
+CC$temp <- as.character(seq(1, 4, by = 0.1))
+
+# plotting (probeersel) staven naast elkaar
+p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','costs.slope')])
+p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="dodge")
+p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
+p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
+p
+ggsave(paste("CC_GE_lin.png"),p)
+
+# plotting (probeersel) staven op elkaar
+# eerst alle getallen positief maken (door te kwadrateren)
+CC$value <- CC$value*CC$value
+
+p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','costs.slope')])
+p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill")
+p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
+p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
+p
+ggsave(paste("CC_GE_lin_stacked_squared.png"),p)
+
+# plotting (probeersel) staven op elkaar
+# eerst alle getallen positief maken (door absolute waarde te nemen)
+CC$value <- abs(CC$value)
+
+p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','costs.slope')])
+p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill")
+p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
+p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
+p
+ggsave(paste("CC_GE_lin_stacked_absolute.png"),p)
+
+
+#----------- plot van CC waarden (non-lin) --------------
+# krijgt een CC matrix
+CCmat <- f.costs.CCmatrix(N,s.seed)
+CCdata = data.table(CCmat)
+# maak er een 'werkbaarder' format van
+CC <-gather(CCdata,variable,value,c('T2010','TCRE','CO22010','cumuCO2result','p.sample'))
+CC=data.table(CC)
+CC$temp <- as.character(seq(1, 4, by = 0.1))
+
+# plotting (probeersel) staven naast elkaar
+p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','p.sample')])
+p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="dodge")
+p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
+p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","p.sample"="dark red","T2010"="black","TCRE"="green"))
+p
+ggsave(paste("CC_GE_nonlin.png"),p)
+
+# plotting (probeersel) staven op elkaar
+# eerst alle getallen positief maken (door te kwadrateren)
+CC$value <- CC$value*CC$value
+
+
+p = ggplot(CC[variable %in% c('p.sample','TCRE','T2010','CO22010')])
+p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill", order = c('p.sample','TCRE','T2010','CO22010'))
+p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
+p = p + scale_fill_manual(values=c("p.sample"="dark red","TCRE"="green","CO22010"="grey","T2010"="black"))
+p
+ggsave(paste("CC_GE_lin_stacked_squared.png"),p)
+
+# plotting (probeersel) staven op elkaar
+# eerst alle getallen positief maken (door absolute waarde te nemen)
+CC$value <- abs(CC$value)
+
+p = ggplot(arrange(CC[variable %in% c('T2010','CO22010','TCRE','p.sample')],variable,c('p.sample','TCRE','T2010','CO22010')))
+p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill")
+p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
+p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","p.sample"="dark red","T2010"="black","TCRE"="green"))
+p
+ggsave(paste("CC_GE_lin_stacked_absolute.png"),p)
+
 
 # maak er een werkbaarder format van
 CC <-gather(CC,variable,value,c('T2010','TCRE','CO22010','cumuCO2result','p.sample'))
@@ -135,5 +213,9 @@ ggsave(paste("Fig1.png"),p,width=12,height=12,dpi=300)
 
 
 
+#--------- boxplots van costs -----------------------
 
-
+# probeersel
+b = ggplot(results)
+b = b + geom_boxplot(aes)
+b

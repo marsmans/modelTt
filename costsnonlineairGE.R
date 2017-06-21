@@ -6,10 +6,11 @@
 #
 #------------------------------------------------
 
-# Den Haag
-setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
-# Thuis
-setwd("~/Documenten/Stage PBL/modelTt")
+if (dir.exists("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")) {     #Den Haag
+  setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+} else if (dir.exists("~/Documenten/Stage PBL/modelTt")) {    #thuis
+  setwd("~/Documenten/Stage PBL/modelTt")
+}
 
 source("TCRE.R")
 

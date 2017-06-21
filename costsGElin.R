@@ -119,6 +119,21 @@ f.dataframe <- function(N,Ttarget,f.seed) {
 N <- 10000
 s.seed <- 21
 data1.5 <- f.dataframe(N,1.5,s.seed)
+data2 <- f.dataframe(N,2,s.seed)
+data3 <- f.dataframe(N,3,s.seed)
+data4 <- f.dataframe(N,4,s.seed)
+
+
+#--------- bundel resultaten voor verschillende Ttarget --------------
+
+results <- NULL
+for (i in seq(1, 4, by = 0.1)) {
+  data <- f.dataframe(N,i,s.seed)
+  results <- cbind(results, data$costs)
+}
+colnames(results) <- as.character(seq(1, 4, by = 0.1))
+results = data.table(results)
+
 
 #-------- correlation coefficient matrix -----------
 

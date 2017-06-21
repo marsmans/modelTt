@@ -8,7 +8,7 @@
 # 
 
 # Den Haag
-setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
+#setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
 # Thuis
 #setwd("~/Documenten/Stage PBL/modelTt")
 
