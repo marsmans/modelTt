@@ -13,12 +13,10 @@ if (dir.exists("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")) {     #Den
 }
 
 
-# Den Haag
-setwd("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")
-# Thuis
-#setwd("~/Documenten/Stage PBL/modelTt")
-
-source("TCRE.R")
+#source("TCRE.R")
+#source("TCREcor.R")
+#source("TCREcorT-tcre.R")
+source("TCREcorCO2-tcre.R")
 
 
 #----------- Relatie cumulatieve CO2 <-> mitigatie kosten -----------------
@@ -116,7 +114,7 @@ f.dataframe <- function(N,Ttarget,f.seed) {
   return(costs.sample_en_result)
 }
 
-N <- 10000
+N <- 1000
 s.seed <- 21
 data1.5 <- f.dataframe(N,1.5,s.seed)
 data2 <- f.dataframe(N,2,s.seed)
@@ -168,3 +166,30 @@ CCmat <- f.costs.CCmatrix(N,s.seed)
 # schrijf naar file
 write.table(CCmat, file="CCmatGElin.txt", row.names=TRUE, col.names=TRUE, sep = ",")
 
+
+
+#----------------- sensitivity package dingen ------------
+library(boot)
+n <- 100
+X <- data.frame(X1 = runif(n, 0.5, 1.5),
+                X2 = runif(n, 1.5, 4.5),
+                X3 = runif(n, 4.5, 13.5))
+# linear model : Y = X1 + X2 + X3
+y <- with(X, X1 + X2 + X3)
+# sensitivity analysis
+pcc1.5 <- pcc(data1.5[,-8], data1.5[,8], nboot = 100)
+print(x)
+plot(x)
+
+
+library(boot)
+n <- 100
+X <- data.frame(X1 = runif(n, 0.5, 1.5),
+                X2 = runif(n, 1.5, 4.5),
+                X3 = runif(n, 4.5, 13.5))
+# linear model : Y = X1 + X2 + X3
+y <- with(X, X1 + X2 + X3)
+# sensitivity analysis
+x <- src(X, y, nboot = 100)
+print(x)
+plot(x)

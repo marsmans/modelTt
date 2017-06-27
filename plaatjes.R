@@ -116,10 +116,7 @@ scatter.cumuCO2result <- function(f.data) {
 }
 
 
-
-
-
-#----------- plot van CC waarden (lin) --------------
+#----------- main plot -----------------
 # krijgt een CC matrix
 CCmat <- f.costs.CCmatrix(N,s.seed)
 CCdata = data.table(CCmat)
@@ -127,6 +124,10 @@ CCdata = data.table(CCmat)
 CC <-gather(CCdata,variable,value,c('T2010','TCRE','CO22010','cumuCO2result','costs.slope'))
 CC=data.table(CC)
 CC$temp <- as.character(seq(1, 4, by = 0.1))
+
+
+#----------- plot van CC waarden (lin) --------------
+
 
 # plotting (probeersel) staven naast elkaar
 p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','costs.slope')])
@@ -145,7 +146,7 @@ p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fil
 p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
 p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
 p
-ggsave(paste("CC_GE_lin_stacked_squared.png"),p)
+ggsave(paste("CC_GE_lin_stacked_squared_withcor.png"),p)
 
 # plotting (probeersel) staven op elkaar
 # eerst alle getallen positief maken (door absolute waarde te nemen)
