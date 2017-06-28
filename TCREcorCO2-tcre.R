@@ -99,7 +99,7 @@ f.cumuvstemp.sample <- function(N, f.seed) {
   ## Zorg ervoor dat je de gesampelde waarden ook gewenste correlaties meegeeft:  
   
   require(pse)    # maak package pse-toegankelijk
-  rho=.8
+  rho=-0.8
   COR<-diag(4)
   COR[3,4]=COR[4,3]=rho;  # specificeer de correlaties; tussen variabele 3 en 4 (CO22010 en TCRE) genomen die gelijk is aan -0.8.
   

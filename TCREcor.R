@@ -97,7 +97,6 @@ f.cumuvstemp.sample <- function(N, f.seed) {
   colnames(x) <- c("Ttarget", "T2010", "TCRE", "CO22010")
   
   ## Zorg ervoor dat je de gesampelde waarden ook gewenste correlaties meegeeft:  
-  
   require(pse)    # maak package pse-toegankelijk
   rho=.8
   COR<-diag(4)
