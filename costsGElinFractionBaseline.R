@@ -13,10 +13,10 @@ if (dir.exists("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")) {     #Den
 }
 
 
-#source("TCRE.R")
+source("TCRE.R")
 #source("TCREcor.R")
 #source("TCREcorT-tcre.R")
-source("TCREcorCO2-tcre.R")
+#source("TCREcorCO2-tcre.R")
 
 
 #----------- Relatie cumulatieve CO2 <-> mitigatie kosten -----------------
@@ -28,6 +28,15 @@ costsUL <- read.csv(file = "./../Databases/costs_UL_GE.txt", header = TRUE)
 # schalen naar Tt al gedaan met inlezen!
 #costsLL[1] <- costsLL[1]/1000
 #costsUL[1] <- costsUL[1]/1000
+
+# baseline = 6500 GtCO2
+# de kosten zijn als functie van fractie van baseline
+# dus om cumulatieve CO2 te krijgen: 
+# vermenigvuldig met 6500
+
+baselineCO2RCP8.5 <- 6.5
+costsLL$cumuCO2 <- (costsLL$cumuCO2/10)*baselineCO2RCP8.5
+costsUL$cumuCO2 <- (costsUL$cumuCO2/10)*baselineCO2RCP8.5
 
 # rechte lijn best fits
 gLL <- lm(data = costsLL, mitigation_costs ~ cumuCO2)
@@ -66,7 +75,7 @@ f.costs.sample <- function(N, f.seed) {
   
   #costs.slope <- qnorm(costs.x[,1], mean=costs_mean, sd=costs.std)
   costs.slope <- qpert(costs.x[,1], coef(gUL)[2], costs_mean, coef(gLL)[2], shape = 4)
-  baselineCO2 <- rep(6, N)
+  baselineCO2 <- rep(4, N)
   # bundel in dataframe
   return(data.frame(costs.slope, baselineCO2))
 }
@@ -114,7 +123,7 @@ f.dataframe <- function(N,Ttarget,f.seed) {
   return(costs.sample_en_result)
 }
 
-N <- 1000
+N <- 10000
 s.seed <- 21
 data1.5 <- f.dataframe(N,1.5,s.seed)
 data2 <- f.dataframe(N,2,s.seed)
