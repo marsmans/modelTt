@@ -33,6 +33,7 @@ costsUL <- read.csv(file = "./../Databases/costs_UL_GE.txt", header = TRUE)
 # de kosten zijn als functie van fractie van baseline
 # dus om cumulatieve CO2 te krijgen: 
 # vermenigvuldig met 6500
+# !!! nog niet goed, baseline = 6500 - 8445 GtCO2
 
 baselineCO2RCP8.5 <- 6.5
 costsLL$cumuCO2 <- (costsLL$cumuCO2/10)*baselineCO2RCP8.5
@@ -125,8 +126,10 @@ f.dataframe <- function(N,Ttarget,f.seed) {
 
 N <- 10000
 s.seed <- 21
+data1 <- f.dataframe(N,1,s.seed)
 data1.5 <- f.dataframe(N,1.5,s.seed)
 data2 <- f.dataframe(N,2,s.seed)
+data2.5 <- f.dataframe(N,2.5,s.seed)
 data3 <- f.dataframe(N,3,s.seed)
 data4 <- f.dataframe(N,4,s.seed)
 
