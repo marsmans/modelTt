@@ -13,10 +13,10 @@ if (dir.exists("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")) {     #Den
 }
 
 
-#source("TCRE.R")
+source("TCRE.R")
 #source("TCREcor.R")
 #source("TCREcorT-tcre.R")
-source("TCREcorCO2-tcre.R")
+#source("TCREcorCO2-tcre.R")
 
 
 #----------- Relatie cumulatieve CO2 <-> mitigatie kosten -----------------
@@ -114,7 +114,7 @@ f.dataframe <- function(N,Ttarget,f.seed) {
   return(costs.sample_en_result)
 }
 
-N <- 1000
+N <- 10000
 s.seed <- 21
 data1.5 <- f.dataframe(N,1.5,s.seed)
 data2 <- f.dataframe(N,2,s.seed)

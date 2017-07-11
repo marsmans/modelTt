@@ -33,7 +33,7 @@ abline(intercept, slope)
 
 # plaatje van costs en hoe de lijnen zijn gefit (lineaire geval)
 par(mfrow=c(1,1))
-plot(costsLL,xlim=c(0,7),ylim=c(0,8))
+plot(costsLL,xlim=c(0,9),ylim=c(0,8))
 abline(gLL)
 points(costsUL)
 abline(gUL)
@@ -145,7 +145,7 @@ p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','costs.slope')])
 p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill")
 p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
 p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
-p = p + ggtitle("CC_GE_lin_nocor_herparam")
+p = p + ggtitle("CC values of GE models with linear relation and fitted graphs")
 p
 ggsave(paste("CC_GE_lin_stacked_squared_withcor.png"),p)
 
