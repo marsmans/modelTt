@@ -145,7 +145,7 @@ p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','costs.slope')])
 p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill")
 p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
 p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
-p = p + ggtitle("CC_GE_lin_nocor")
+p = p + ggtitle("CC_GE_lin_nocor_herparam")
 p
 ggsave(paste("CC_GE_lin_stacked_squared_withcor.png"),p)
 

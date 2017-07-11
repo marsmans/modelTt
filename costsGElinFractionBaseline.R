@@ -29,15 +29,23 @@ costsUL <- read.csv(file = "./../Databases/costs_UL_GE.txt", header = TRUE)
 #costsLL[1] <- costsLL[1]/1000
 #costsUL[1] <- costsUL[1]/1000
 
-# baseline = 6500 GtCO2
-# de kosten zijn als functie van fractie van baseline
+# baseline = 6500 - 8443 GtCO2 vanaf 1870
+# de kosten zijn als functie van 'residual' cumulatieve CO2
+# van fractie van baseline emissies van periode 2011-2100
+# maar wel als fractie van 'residual' cumulatieve CO2 
 # dus om cumulatieve CO2 te krijgen: 
-# vermenigvuldig met 6500
-# !!! nog niet goed, baseline = 6500 - 8445 GtCO2
+# met fractie van baseline residual cumu CO2 kunnen we dus niet werken.
+#
+# Anderemethode: 
+# TCRE-figuur: de concentratie-ellipsen lopen van 2397 tot 8443 GtCO2
+# kostenfiguur: de punten lopen van 0,113 tot 0,600
+# als we dit herparametriseren moeten we de x-as van de kostenfiguur in deze functie stoppen: cumuCO2 = 12,415 * fr.baseline + 0,994
 
-baselineCO2RCP8.5 <- 6.5
-costsLL$cumuCO2 <- (costsLL$cumuCO2/10)*baselineCO2RCP8.5
-costsUL$cumuCO2 <- (costsUL$cumuCO2/10)*baselineCO2RCP8.5
+herparam.slope <- 12.415
+herparam.intercept <- 0.994
+
+costsLL$cumuCO2 <- herparam.slope*(costsLL$cumuCO2/10) + herparam.intercept
+costsUL$cumuCO2 <- herparam.slope*(costsUL$cumuCO2/10) + herparam.intercept
 
 # rechte lijn best fits
 gLL <- lm(data = costsLL, mitigation_costs ~ cumuCO2)
@@ -61,6 +69,14 @@ costs.std05 <- (slope_mean - coef(gLL)[2])/abs(qnorm(0.05))
 costs.std2 = abs((costs.std05 + costs.std95)/2)
 
 
+#--------------- Nulpunt berekenen -------------------------
+
+nulpunt <- function(lijn) {
+  b <- lijn$coefficients[1]
+  a <- lijn$coefficients[2]
+  return((-1*b)/a)
+}
+
 #--------------- Sample cost.slope en baselineCO2  ---------
 
 f.costs.sample <- function(N, f.seed) {
@@ -76,7 +92,8 @@ f.costs.sample <- function(N, f.seed) {
   
   #costs.slope <- qnorm(costs.x[,1], mean=costs_mean, sd=costs.std)
   costs.slope <- qpert(costs.x[,1], coef(gUL)[2], costs_mean, coef(gLL)[2], shape = 4)
-  baselineCO2 <- rep(4, N)
+  cumu.no_costs <- (nulpunt(gLL)+nulpunt(gUL))/2
+  baselineCO2 <- rep(cumu.no_costs, N)
   # bundel in dataframe
   return(data.frame(costs.slope, baselineCO2))
 }
