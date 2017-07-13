@@ -14,6 +14,7 @@ if (dir.exists("~/disks/y/ontwapps/Timer/Users/Stijn/Model/modelTt")) {     #Den
 
 
 source("TCRE.R")
+source("TCRE-T2010HV.R")
 #source("TCREcor.R")
 #source("TCREcorT-tcre.R")
 #source("TCREcorCO2-tcre.R")
@@ -151,15 +152,26 @@ data3 <- f.dataframe(N,3,s.seed)
 data4 <- f.dataframe(N,4,s.seed)
 
 
-#--------- bundel resultaten voor verschillende Ttarget --------------
+#--------- bundel resultaten van het carbon budget voor verschillende Ttarget --------------
 
-results <- NULL
+CO2.results <- NULL
 for (i in seq(1, 4, by = 0.1)) {
   data <- f.dataframe(N,i,s.seed)
-  results <- cbind(results, data$costs)
+  CO2.results <- cbind(CO2.results, data$cumuCO2result)
 }
-colnames(results) <- as.character(seq(1, 4, by = 0.1))
-results = data.table(results)
+colnames(CO2.results) <- as.character(seq(1, 4, by = 0.1))
+CO2.results = data.table(CO2.results)
+
+
+#--------- bundel resultaten van het carbon budget voor verschillende Ttarget --------------
+
+costs.results <- NULL
+for (i in seq(1, 4, by = 0.1)) {
+  data <- f.dataframe(N,i,s.seed)
+  costs.results <- cbind(costs.results, data$costs)
+}
+colnames(costs.results) <- as.character(seq(1, 4, by = 0.1))
+costs.results = data.table(costs.results)
 
 
 #-------- correlation coefficient matrix -----------

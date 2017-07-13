@@ -39,6 +39,12 @@ points(costsUL)
 abline(gUL)
 abline(intercept_mean, slope_mean)
 
+# plaatje van CO2.results
+CO2.results <- data.table(CO2.results)
+CO2.results2 <-gather(CO2.results,temp,cumuCO2,as.character(seq(1, 4, by = 0.1)))
+par(mfrow=c(1,1))
+plot(CO2.results2$temp~CO2.results2$cumuCO2,xlim=c(0,9), ylim=c(0,4))
+
 
 #----------- histogrammen --------------
 
@@ -126,7 +132,7 @@ CC=data.table(CC)
 CC$temp <- as.character(seq(1, 4, by = 0.1))
 
 
-#----------- plot van CC waarden (lin) --------------
+#----------- plot van CC waarden (lin) met costs.slope --------------
 
 
 # plotting (probeersel) staven naast elkaar
@@ -145,7 +151,7 @@ p = ggplot(CC[variable %in% c('T2010','CO22010','TCRE','costs.slope')])
 p = p + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill")
 p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
 p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
-p = p + ggtitle("CC values of GE models with linear relation and fitted graphs")
+p = p + ggtitle("CC values of GE models with linear relation and fitted cost graph and bounded TCRE")
 p
 ggsave(paste("CC_GE_lin_stacked_squared_withcor.png"),p)
 
@@ -159,6 +165,21 @@ p = p + theme_bw()# + theme(axis.text.x=element_text(size=12))
 p = p + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","costs.slope"="dark red","T2010"="black","TCRE"="green"))
 p
 ggsave(paste("CC_GE_lin_stacked_absolute.png"),p)
+
+
+#----------- plot van CC waarden (lin) zonder costs.slope --------------
+
+# plotting (probeersel) staven op elkaar
+# eerst alle getallen positief maken (door te kwadrateren)
+CC$value <- CC$value*CC$value
+
+q = ggplot(CC[variable %in% c('T2010','CO22010','TCRE')])
+q = q + geom_bar(aes(x=temp,y=value,fill=variable),stat="identity",position="fill")
+q = q + theme_bw()# + theme(axis.text.x=element_text(size=12))
+q = q + scale_fill_manual(values=c("CO22010"="grey","cumuCO2result"="dark blue","T2010"="black","TCRE"="green"))
+q = q + ggtitle("CC values of GE models with linear relation and fitted cost graph and bounded TCRE")
+q
+ggsave(paste("CC_GE_lin_stacked_squared_withcor.png"),q)
 
 
 #----------- plot van CC waarden (non-lin) --------------
